@@ -1,5 +1,6 @@
 package pfa.gestionsalle.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,5 +26,6 @@ public class Role {
     }
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnore
     private List<Utilisateur> utilisateurs = new ArrayList<>();
 }

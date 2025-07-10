@@ -3,8 +3,11 @@ package pfa.gestionsalle.web;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pfa.gestionsalle.entities.Reservation;
 import pfa.gestionsalle.entities.Utilisateur;
+import pfa.gestionsalle.repository.ReservationRepository;
 import pfa.gestionsalle.repository.UserRepository;
 
 import java.util.List;
@@ -18,30 +21,74 @@ public class UserController {
 
 
     @GetMapping("/index")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Page index(
             @RequestParam(defaultValue = "0") int page ,
-            @RequestParam(defaultValue = "3") int size){
+            @RequestParam(defaultValue = "2") int size){
         return userRepository.findAll(PageRequest.of(page,size));
     }
-//-----------------------------------------------------//
 
     @GetMapping("/users")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Utilisateur> findAll() {
         return userRepository.findAll();
     }
+//-----------------------------------------------------//
 
-    @GetMapping("/id")
-    public Utilisateur findById(@PathVariable("id") long id) {
-        return userRepository.findById(id);
+    //*************************GERER LES UTILISATEURS****************************//
+
+    @PostMapping("/save")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Utilisateur SaveUser(Utilisateur utilisateur) { return userRepository.save(utilisateur); }
+
+    @PutMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Utilisateur EditUser(@PathVariable("id") Long id ,@RequestBody Utilisateur userDetails) {
+        Utilisateur utilisateur = userRepository.findById(id).get();
+        utilisateur.setNom(userDetails.getNom());
+        utilisateur.setPrenom(userDetails.getPrenom());
+        utilisateur.setEmail(userDetails.getEmail());
+        return userRepository.save(utilisateur);
     }
 
-    @GetMapping("/name/{name}")
-    public List<Utilisateur> findByNom(@PathVariable("name") String nom){
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void DeleteUser(@PathVariable("id") Long id) { userRepository.deleteById(id); }
+
+    //-------------------------------------------------------------------------------------------------------------------
+
+    @GetMapping("/{nom}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<Utilisateur> findByNom(@PathVariable("nom") String nom){
         return userRepository.findByNom(nom);
     }
 
-    @GetMapping("/email/{email}")
+    @GetMapping("/{prenom}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<Utilisateur> findByPrenom(@PathVariable("prenom") String prenom){ return userRepository.findByPrenom(prenom); }
+
+
+    @GetMapping("/nom/{KW}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<Utilisateur> findByNomContainsIgnoreCase(@PathVariable("KW") String KW) { return userRepository.findByNomContainsIgnoreCase(KW); }
+
+    @GetMapping("/prenom/{KW}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<Utilisateur> findByPrenomContainsIgnoreCase(@PathVariable("KW") String KW) { return userRepository.findByPrenomContainsIgnoreCase(KW); }
+
+    //-----------------------------------------------------//
+
+    @GetMapping("/user/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Utilisateur findById(@PathVariable("id") long id) { return userRepository.findById(id); }
+
+    @GetMapping("/{email}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Utilisateur findByEmail(@PathVariable String email){
         return userRepository.findByEmail(email);
     }
+    //------------------------------------------------------------------------------------------------------------------
+
+
+
 }

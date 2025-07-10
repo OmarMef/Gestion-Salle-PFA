@@ -1,5 +1,7 @@
 package pfa.gestionsalle.entities;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +30,7 @@ public class Utilisateur {
 
     @ManyToOne
     @JoinColumn(name = "id_role")
+    @JsonIgnoreProperties({"id_role", "description", "utilisateurs"})
     private Role role;
 
     public Utilisateur(String nom, String prenom, String email, String password, Role role) {
