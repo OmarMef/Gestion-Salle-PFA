@@ -7,4 +7,5 @@ import pfa.gestionsalle.entities.Utilisateur;
 import java.util.List;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
+    Role findByNomRole(String nomRole);
 }

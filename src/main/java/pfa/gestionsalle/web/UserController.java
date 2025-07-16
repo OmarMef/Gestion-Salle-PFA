@@ -1,5 +1,6 @@
 package pfa.gestionsalle.web;
 
+import jdk.jshell.execution.Util;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +21,7 @@ public class UserController {
     private UserRepository userRepository;
 
 
-    @GetMapping("/index")
+    @GetMapping("/admin/index")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Page index(
             @RequestParam(defaultValue = "0") int page ,
@@ -56,17 +57,27 @@ public class UserController {
     public void DeleteUser(@PathVariable("id") Long id) { userRepository.deleteById(id); }
 
     //-------------------------------------------------------------------------------------------------------------------
+    @GetMapping("/username/{username}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Utilisateur findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 
-    @GetMapping("/{nom}")
+    @GetMapping("/nom/{nom}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Utilisateur> findByNom(@PathVariable("nom") String nom){
         return userRepository.findByNom(nom);
     }
 
-    @GetMapping("/{prenom}")
+    @GetMapping("/prenom/{prenom}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Utilisateur> findByPrenom(@PathVariable("prenom") String prenom){ return userRepository.findByPrenom(prenom); }
 
+    @GetMapping("/email/{email}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Utilisateur findByEmail(@PathVariable String email){
+        return userRepository.findByEmail(email);
+    }
 
     @GetMapping("/nom/{KW}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -82,11 +93,6 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Utilisateur findById(@PathVariable("id") long id) { return userRepository.findById(id); }
 
-    @GetMapping("/{email}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Utilisateur findByEmail(@PathVariable String email){
-        return userRepository.findByEmail(email);
-    }
     //------------------------------------------------------------------------------------------------------------------
 
 

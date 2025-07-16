@@ -3,6 +3,7 @@ package pfa.gestionsalle.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,15 +15,17 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Role {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_role;
-    private String nom_role;
+    @Column(name = "nom_role")
+    private String nomRole;
     private String description;
 
-    public Role(String nom_role) {
-        this.nom_role = nom_role;
+    public Role(String nomRole) {
+        this.nomRole = nomRole;
     }
 
     @OneToMany(mappedBy = "role")

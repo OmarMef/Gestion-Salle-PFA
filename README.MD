@@ -18,7 +18,7 @@
 
 <h2>Salle-Equip-ID</h2>
 
-<p style="color: darkorchid">Cette entité sert simplement a créer des clés 
+<p style="color: #b5cc32">Cette entité sert simplement a créer des clés 
 primaires pour la classe suivante elle ne sera pas 
 créer dans la base de donnée comme entité propre</p>
 

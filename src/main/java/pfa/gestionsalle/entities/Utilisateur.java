@@ -23,6 +23,8 @@ public class Utilisateur {
 
     private String nom;
     private String prenom;
+    @Column(unique = true)
+    private String username;
 
     @Column(unique = true)
     private String email;
@@ -33,9 +35,10 @@ public class Utilisateur {
     @JsonIgnoreProperties({"id_role", "description", "utilisateurs"})
     private Role role;
 
-    public Utilisateur(String nom, String prenom, String email, String password, Role role) {
+    public Utilisateur(String nom, String prenom, String username , String email, String password, Role role) {
         this.nom = nom;
         this.prenom = prenom;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
