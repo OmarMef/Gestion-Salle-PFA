@@ -1,4 +1,4 @@
-package pfa.gestionsalle.security.service;
+package pfa.gestionsalle.security.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.User;

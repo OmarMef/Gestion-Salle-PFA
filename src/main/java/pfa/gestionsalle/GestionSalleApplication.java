@@ -2,19 +2,17 @@ package pfa.gestionsalle;
 
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pfa.gestionsalle.entities.Role;
-import pfa.gestionsalle.entities.Utilisateur;
+import pfa.gestionsalle.entities.Salle;
 import pfa.gestionsalle.repository.RoleRepository;
+import pfa.gestionsalle.repository.SalleRepository;
 import pfa.gestionsalle.repository.UserRepository;
-import pfa.gestionsalle.security.service.AccountService;
-import pfa.gestionsalle.security.service.UserDetailsServiceImpl;
+import pfa.gestionsalle.security.services.AccountService;
 
 
 @SpringBootApplication
@@ -23,6 +21,7 @@ public class GestionSalleApplication implements CommandLineRunner {
 
 	private UserRepository userRepository;
     private RoleRepository roleRepository;
+	private SalleRepository salleRepository;
 
 
 	public static void main(String[] args) {
@@ -52,6 +51,8 @@ public class GestionSalleApplication implements CommandLineRunner {
 		userRepository.save(new Utilisateur("Amrani","Mouad","mouad@gmail.com","1234", admin_role));
 		userRepository.save(new Utilisateur("Bel","Olaya","olaya@gmail.com","1234", admin_role));
 		*/
+
+
 	}
 
 	@Bean
@@ -60,17 +61,23 @@ public class GestionSalleApplication implements CommandLineRunner {
 			accountService.addNewRole("ADMIN");
 			accountService.addNewRole("USER");
 
-			accountService.addNewUser("Meftah","Omar","omar","omar@gmail.com","1234","1234");
-			accountService.addNewUser("Ben","Ahmed","ahmed","ahmed@gmail.com","1234","1234");
-			accountService.addNewUser("Ham","Khalil","admin","khalil@gmail.com","1234","1234");
-			accountService.addNewUser("Test","Test","test","test@gmail.com","1234","1234");
+			accountService.addNewUser("Meftah","Omar","user1@gmail.com","1234","1234");
+			accountService.addNewUser("Ben","Ahmed","user2@gmail.com","1234","1234");
+			accountService.addNewUser("Ham","Khalil","admin1@gmail.com","1234","1234");
+			accountService.addNewUser("Test","Test","admin2@gmail.com","1234","1234");
 
-			accountService.addRoleToUser("omar@gmail.com","USER");
-			accountService.addRoleToUser("ahmed@gmail.com","USER");
-			accountService.addRoleToUser("khalil@gmail.com","ADMIN");
-			accountService.addRoleToUser("test@gmail.com","ADMIN");
+			accountService.addRoleToUser("user1@gmail.com","USER");
+			accountService.addRoleToUser("user2@gmail.com","USER");
+			accountService.addRoleToUser("admin1@gmail.com","ADMIN");
+			accountService.addRoleToUser("admin2@gmail.com","ADMIN");
 
-			accountService.deleteRoleFromUser("test@gmail.com","ADMIN");
+			accountService.deleteRoleFromUser("admin2@gmail.com","ADMIN");
+
+			accountService.addRoleToUser("admin2@gmail.com","USER");
+
+			salleRepository.save(new Salle("manger",100,"ghandi"));
+
+
 
 		};
 	}

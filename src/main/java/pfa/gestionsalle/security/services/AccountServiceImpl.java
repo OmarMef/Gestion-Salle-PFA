@@ -1,4 +1,4 @@
-package pfa.gestionsalle.security.service;
+package pfa.gestionsalle.security.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,15 +20,14 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Utilisateur addNewUser(String nom, String prenom,String username ,String email, String password, String ConfirmPassword) {
-        Utilisateur user = userRepository.findByEmail(email);
+    public Utilisateur addNewUser(String nom, String prenom,String username , String password, String ConfirmPassword) {
+        Utilisateur user = userRepository.findByUsername(username);
         if(user != null) throw new RuntimeException("User already exists");
         if(!password.equals(ConfirmPassword)) throw new RuntimeException("Passwords do not match");
         user = Utilisateur.builder()
                 .nom(nom)
                 .prenom(prenom)
                 .username(username)
-                .email(email)
                 .password(passwordEncoder.encode(password))
                 .build();
         Utilisateur savedUser = userRepository.save(user);
@@ -46,8 +45,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void addRoleToUser(String email, String role) {
-        Utilisateur user = userRepository.findByEmail(email);
+    public void addRoleToUser(String username, String role) {
+        Utilisateur user = userRepository.findByUsername(username);
         Role role1 = roleRepository.findByNomRole(role);
         if(user == null) throw new RuntimeException("User does not exist");
         if(role1 == null) throw new RuntimeException("Role does not exist");
@@ -55,8 +54,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deleteRoleFromUser(String email, String role) {
-        Utilisateur user = userRepository.findByEmail(email);
+    public void deleteRoleFromUser(String username, String role) {
+        Utilisateur user = userRepository.findByUsername(username);
         Role role1 = roleRepository.findByNomRole(role);
         if(user == null) throw new RuntimeException("User does not exist");
         if(role1 == null) throw new RuntimeException("Role does not exist");
