@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pfa.gestionsalle.security.services.AccountService;
+import pfa.gestionsalle.service.RoleService;
 
 
 @SpringBootApplication
@@ -27,10 +28,12 @@ public class GestionSalleApplication implements CommandLineRunner {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(AccountService accountService) {
+	CommandLineRunner commandLineRunner(AccountService accountService, RoleService roleService) {
 		return args -> {
-			accountService.addNewRole("ADMIN");
-			accountService.addNewRole("USER");
+			roleService.addNewRole("ADMIN", "ROLE_ADMIN");
+			roleService.addNewRole("USER", "ROLE_USER");
+			roleService.addNewRole("RESPONSABLE", "ROLE_RESPONSABLE");
+			roleService.deleteRole("RESPONSABLE");
 
 			accountService.addNewUser("Meftah","Omar","user1@gmail.com","1234","1234");
 			accountService.addNewUser("Ben","Ahmed","user2@gmail.com","1234","1234");

@@ -89,17 +89,6 @@ public class AccountServiceImpl implements AccountService {
         return userRepository.findById(id).orElse(null);
     }
 
-
-    @Override
-    public Role addNewRole(String role){
-        Role newRole = roleRepository.findByNomRole(role);
-        if(newRole != null) throw new RuntimeException("Role already exists");
-        newRole = Role.builder()
-                .nomRole(role)
-                .build();
-        return roleRepository.save(newRole);
-    }
-
     @Override
     public void addRoleToUser(String username, String role) {
         Utilisateur user = userRepository.findByUsername(username);
@@ -123,5 +112,11 @@ public class AccountServiceImpl implements AccountService {
         return userRepository.findByUsername(username);
     }
 
+    @Override
+    public Role LoadRoleByUsername(String Username) {
+        Utilisateur user1 =userRepository.findByUsername(Username);
+        if(user1 == null) throw new RuntimeException("User does not exist");
+        return user1.getRole();
+    }
 
 }

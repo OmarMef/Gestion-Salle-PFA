@@ -21,14 +21,12 @@ public interface AccountService {
     List<Utilisateur> findByNomContainsIgnoreCase(String KW);
     List<Utilisateur> findByPrenomContainsIgnoreCase(String prenom);
     Utilisateur findById(long id);
-//*******************************************************************************************
-    Role addNewRole(String role);
-
+//******************************************************************************************
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     void addRoleToUser(String username , String role);
-
     void deleteRoleFromUser(String username , String role);
     Utilisateur LoadUserByUsername(String Username);
+    Role LoadRoleByUsername(String Username);
 
 
 }
