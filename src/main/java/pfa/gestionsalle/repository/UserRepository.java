@@ -14,7 +14,7 @@ public interface UserRepository extends JpaRepository<Utilisateur, Long> {
     List<Utilisateur> findByNomContainsIgnoreCase(String KW);
     List<Utilisateur> findByPrenomContainsIgnoreCase(String prenom);
     //-------------------------------------------------------//
-    Utilisateur findById(long id);
+
     //-------------------------------------------------------//
 
 
