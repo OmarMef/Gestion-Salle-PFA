@@ -1,7 +1,9 @@
 package pfa.gestionsalle.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Salle {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -27,5 +30,6 @@ public class Salle {
     }
 
     @OneToMany(mappedBy = "salle" , cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Reservation> reservations = new ArrayList<>();
 }

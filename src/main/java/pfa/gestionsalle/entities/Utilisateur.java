@@ -2,6 +2,7 @@ package pfa.gestionsalle.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,7 @@ import java.util.List;
 public class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_utilisateur;
+    private Long id;
 
     private String nom;
     private String prenom;
@@ -43,9 +44,11 @@ public class Utilisateur {
     }
 
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Reservation> reservations = new ArrayList<>();
 
     @OneToMany(mappedBy = "utilisateur" , cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Historique> historiques = new ArrayList<>();
 
 }

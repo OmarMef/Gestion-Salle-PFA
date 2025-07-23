@@ -21,8 +21,8 @@ public class SalleController {
 
     @PostMapping("/save")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Salle createSalle(@RequestBody Salle salle) {
-        return salleService.createSalle(salle);
+    public Salle createSalle(String nomSalle ,int capacite ,String localisation) {
+        return salleService.createSalle(nomSalle,capacite,localisation);
     }
 
     @PutMapping("/{id}")

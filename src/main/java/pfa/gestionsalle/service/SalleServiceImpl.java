@@ -18,11 +18,20 @@ public class SalleServiceImpl implements SalleService {
 
     //SAVE
     @Override
-    public Salle createSalle(Salle salle) {
-        Salle salleMMnom = salleRepository.findSalleByNom(salle.getNom());
-        if (salleMMnom != null) throw new RuntimeException("Salle deja existente");
-        Salle savedSalle = salleRepository.save(salle);
-        return salleRepository.save(savedSalle);
+    public Salle createSalle(String nomSalle ,int capacite ,String localisation) {
+        Salle salle = salleRepository.findSalleByNom(nomSalle);
+        if (salle != null) {
+            throw new RuntimeException("Salle déjà existante");
+        }
+
+        salle = Salle.builder()
+                    .nom(nomSalle)
+                    .capacite(capacite)
+                    .localisation(localisation)
+                    .build();
+
+        return salleRepository.save(salle);
+
     }
 
     //UPDATE

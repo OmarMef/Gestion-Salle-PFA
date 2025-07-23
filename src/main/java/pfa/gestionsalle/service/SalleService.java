@@ -12,7 +12,7 @@ import java.util.List;
 @Transactional
 public interface SalleService {
 
-    Salle createSalle(Salle salle);
+    Salle createSalle(String nomSalle ,int capacite ,String localisation);
     Salle updateSalle(Long id, Salle salleModifiee);
     void deleteSalle(Long id);
 //*************************************************************************
