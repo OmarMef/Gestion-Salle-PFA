@@ -43,10 +43,10 @@ public class GestionSalleApplication implements CommandLineRunner {
 			roleService.addNewRole("RESPONSABLE", "ROLE_RESPONSABLE");
 			roleService.deleteRole("RESPONSABLE");
 
-			accountService.addNewUser("Meftah","Omar","user1@gmail.com","1234","1234");
-			accountService.addNewUser("Ben","Ahmed","user2@gmail.com","1234","1234");
-			accountService.addNewUser("Ham","Khalil","admin1@gmail.com","1234","1234");
-			accountService.addNewUser("Test","Test","admin2@gmail.com","1234","1234");
+			Utilisateur omar = accountService.addNewUser("Meftah","Omar","user1@gmail.com","1234","1234");
+			Utilisateur ahmed = accountService.addNewUser("Ben","Ahmed","user2@gmail.com","1234","1234");
+			Utilisateur khalil = accountService.addNewUser("Ham","Khalil","admin1@gmail.com","1234","1234");
+			Utilisateur test = accountService.addNewUser("Test","Test","admin2@gmail.com","1234","1234");
 
 
 			accountService.addRoleToUser("user1@gmail.com","USER");
@@ -58,16 +58,23 @@ public class GestionSalleApplication implements CommandLineRunner {
 			accountService.addRoleToUser("admin2@gmail.com","ADMIN");
 
 
-			Utilisateur omar = accountService.addNewUser("Meftah","Omar","omar@gmail.com","1234","1234");
+			accountService.addNewUser("Meftah","Omar","omar@gmail.com","1234","1234");
 			Salle salle1 = salleService.createSalle("salle1",100,"CASABLANCA");
 			Salle salle2 = salleService.createSalle("salle2",250,"RABAT");
 
 
-			Reservation reservation1 = new Reservation(LocalDate.of(2022,10,13)
-					, LocalTime.of(12,30),LocalTime.of(13,00), Status.EN_ATTENTE, Evenement.REUNION
-					,salle2 , omar);
-			reservationService.createReservation(reservation1);
+			Reservation reservation1 = reservationService.createReservation(LocalDate.of(2022,10,13)
+					, LocalTime.of(12,30),LocalTime.of(13,00), Evenement.REUNION
+					,salle2 , khalil);
 
+			Reservation reservation2 = reservationService.createReservation(LocalDate.of(2022,10,13)
+					, LocalTime.of(12,30),LocalTime.of(13,00), Evenement.REUNION
+					,salle1 , omar);
+
+			reservationService.updateReservation(1L,LocalDate.of(2026,12,14),
+					LocalTime.of(12,30),LocalTime.of(13,00), Status.EN_ATTENTE, Evenement.REUNION);
+
+			reservationService.deleteReservation(1L,reservation2);
 		};
 	}
 

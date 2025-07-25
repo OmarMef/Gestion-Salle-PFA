@@ -22,6 +22,16 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
 //**************************************************************************************************
 
+    @Query("SELECT r FROM Reservation r " +
+            "WHERE r.salle.id = :salleId " +
+            "AND r.date_reservation = :date " +
+            "AND r.id <> :currentId " +
+            "AND (r.H_debut < :newH_fin AND r.H_fin > :newH_debut)")
+    List<Reservation> findConflits(@Param("salleId") Long salleId,
+                                   @Param("date") LocalDate date,
+                                   @Param("newH_debut") LocalTime newH_debut,
+                                   @Param("newH_fin") LocalTime newH_fin,
+                                   @Param("currentId") Long currentId);
 
     @Query("SELECT r FROM Reservation r WHERE r.H_debut = :hDebut AND r.H_fin = :hFin")
     List<Reservation> findByHeureDebutAndHeureFin(@Param("hDebut") LocalTime hDebut, @Param("hFin") LocalTime hFin);

@@ -2,6 +2,7 @@ package pfa.gestionsalle.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,7 +20,7 @@ import java.time.LocalTime;
 public class Reservation {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_reservation;
+    private long id;
 
     private LocalDate date_reservation;
     private LocalTime H_debut;
@@ -38,11 +41,12 @@ public class Reservation {
     @JsonIncludeProperties({"nom","prenom"})
     private Utilisateur utilisateur;
 
-    //@Version
-    //private Long version;
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Historique> historiques = new ArrayList<>();
 
 
-    public Reservation(LocalDate date_reservation , LocalTime H_debut ,
+    /*public Reservation(LocalDate date_reservation , LocalTime H_debut ,
                        LocalTime H_fin ,Status status, Evenement type_evenement,
                        Salle salle , Utilisateur utilisateur) {
         this.date_reservation = date_reservation;
@@ -52,6 +56,6 @@ public class Reservation {
         this.type_evenement = type_evenement;
         this.salle = salle;
         this.utilisateur = utilisateur;
-    }
+    }*/
 
 }
