@@ -6,6 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import pfa.gestionsalle.entities.Historique;
 import pfa.gestionsalle.repository.HistoriqueRepository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -29,4 +32,10 @@ public class HistoriqueServiceImpl implements HistoriqueService {
     public List<Historique> getHistoriquesByUtilisateurId(Long id) {
         return historiqueRepository.findByUtilisateurId(id);
     }
+
+    @Override
+    public List<Historique> getHistoriquesByAction(String action) {
+        return historiqueRepository.findByActionIgnoreCase(action);
+    }
+
 }

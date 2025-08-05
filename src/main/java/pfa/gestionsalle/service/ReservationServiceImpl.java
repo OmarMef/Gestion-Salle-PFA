@@ -68,7 +68,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setStatus(Status.EN_ATTENTE);
 
         Historique historique = new Historique();
-        historique.setDate_action(LocalDate.now());
+        historique.setDateAction(LocalDate.now());
         historique.setAction("CREATION");
         historique.setH_action(LocalTime.now());
         historique.setReservation(reservation);
@@ -122,7 +122,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setType_evenement(newtypeEvenement);
 
         Historique historique = new Historique();
-        historique.setDate_action(LocalDate.now());
+        historique.setDateAction(LocalDate.now());
         historique.setAction("MODIFICATION");
         historique.setH_action(LocalTime.now());
         historique.setReservation(reservation);
@@ -148,7 +148,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.save(reservation);
 
         Historique historique = new Historique();
-        historique.setDate_action(LocalDate.now());
+        historique.setDateAction(LocalDate.now());
         historique.setAction("ANNULATION");
         historique.setH_action(LocalTime.now());
         historique.setReservation(reservation);
