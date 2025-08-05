@@ -1,6 +1,7 @@
 package pfa.gestionsalle.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -41,8 +42,9 @@ public class Reservation {
     @JsonIncludeProperties({"nom","prenom"})
     private Utilisateur utilisateur;
 
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "reservation", fetch = FetchType.LAZY)
     @JsonManagedReference
+    @JsonIgnore
     private List<Historique> historiques = new ArrayList<>();
 
 

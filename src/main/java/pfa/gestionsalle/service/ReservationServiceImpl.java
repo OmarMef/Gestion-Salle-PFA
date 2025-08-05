@@ -7,10 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 import pfa.gestionsalle.entities.*;
 import pfa.gestionsalle.repository.HistoriqueRepository;
 import pfa.gestionsalle.repository.ReservationRepository;
+import pfa.gestionsalle.repository.SalleRepository;
+import pfa.gestionsalle.repository.UserRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,11 +24,27 @@ public class ReservationServiceImpl implements ReservationService {
 
     private ReservationRepository reservationRepository;
     private HistoriqueRepository historiqueRepository;
+    private SalleRepository salleRepository;
+    private UserRepository userRepository;
 
     //SAVE
     @Override
     public Reservation createReservation(LocalDate date_reservation , LocalTime H_debut , LocalTime H_fin,
-                                         Evenement type_evenement, Salle salle , Utilisateur utilisateur) {
+                                         Evenement type_evenement, Long salleId , Long utilisateurId) {
+
+        if (date_reservation == null || H_debut == null || H_fin == null) {
+            throw new RuntimeException("Date et heures de réservation sont obligatoires.");
+        }
+        if (H_debut.isAfter(H_fin)) {
+            throw new RuntimeException("L'heure de début doit être avant l'heure de fin");
+        }
+        if (salleId == null || utilisateurId == null) {
+            throw new RuntimeException("L'ID de la salle et de l'utilisateur sont obligatoires.");
+        }
+        Salle salle = salleRepository.findById(salleId)
+                .orElseThrow(() -> new RuntimeException("Salle introuvable avec l'ID : " + salleId));
+        Utilisateur utilisateur = userRepository.findById(utilisateurId)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable avec l'ID : " + utilisateurId));
 
         Reservation reservation = new Reservation();
 
@@ -36,15 +55,6 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setSalle(salle);
         reservation.setUtilisateur(utilisateur);
 
-        if (reservation.getH_debut().isAfter(reservation.getH_fin())) {
-            throw new RuntimeException("L'heure de début doit être avant l'heure de fin");
-        }
-        if (reservation.getDate_reservation() == null || reservation.getH_debut() == null || reservation.getH_fin() == null) {
-            throw new RuntimeException("Date et heures de réservation sont obligatoires.");
-        }
-        if (reservation.getSalle() == null || reservation.getUtilisateur() == null) {
-            throw new RuntimeException("Salle et utilisateur sont obligatoires.");
-        }
         boolean available = isSalleAvailable(
                 reservation.getSalle().getId(),
                 reservation.getDate_reservation(),
@@ -81,6 +91,9 @@ public class ReservationServiceImpl implements ReservationService {
         }
         if (newDate.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("La date de réservation ne peut pas être dans le passé.");
+        }
+        if (reservation.getStatus() == Status.VALIDEE) {
+            throw new IllegalStateException("Impossible de modifier une réservation déjà validée.");
         }
         List<Reservation> conflits = reservationRepository.findConflits(
                 reservation.getSalle().getId(), newDate, newH_debut, newH_fin, id);
@@ -123,10 +136,10 @@ public class ReservationServiceImpl implements ReservationService {
 
     //DELETE
     @Override
-    public void deleteReservation(Long id , Reservation reservation) {
-        if (!reservationRepository.existsById(id)) {
-            throw new RuntimeException("Réservation introuvable");
-        }
+    public void deleteReservation(Long id) {
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Réservation introuvable"));
+
         if (reservation.getStatus() == Status.VALIDEE) {
             throw new RuntimeException("Impossible de supprimer une réservation validée.");
         }
@@ -186,6 +199,44 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservation.setStatus(statutEnum);
         return reservationRepository.save(reservation);
+    }
+
+    //************************************************************************************************
+    @Override
+    public Reservation ReservationById(Long id){
+        return reservationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Réservation introuvable avec l'ID : " + id));
+    }
+
+    @Override
+    public List<Reservation> getReservationsByUserId(Long id) {
+        return reservationRepository.findByUtilisateurId(id);
+    }
+
+    @Override
+    public List<Reservation> getReservationsBySalleId(Long id) {
+        return reservationRepository.findBySalleId(id);
+    }
+
+    @Override
+    public List<Reservation> getReservationByUserName(String nom) {
+        return reservationRepository.findByUtilisateurNom(nom);
+    }
+
+    @Override
+    public List<Salle> getSallesDisponibles(LocalDate date, LocalTime startTime, LocalTime endTime) {
+        List<Salle> toutesLesSalles = salleRepository.findAll();
+        List<Salle> sallesDisponibles = new ArrayList<>();
+        for (Salle salle : toutesLesSalles) {
+            List<Reservation> reservations = reservationRepository.checkSalleAvailability(
+                    salle.getId(), date, startTime, endTime
+            );
+
+            if (reservations.isEmpty()) {
+                sallesDisponibles.add(salle);
+            }
+        }
+        return sallesDisponibles;
     }
 
 }

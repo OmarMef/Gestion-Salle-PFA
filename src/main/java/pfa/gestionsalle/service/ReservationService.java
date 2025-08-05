@@ -10,9 +10,9 @@ import java.util.List;
 public interface ReservationService {
 
     Reservation createReservation(LocalDate date_reservation , LocalTime H_debut , LocalTime H_fin,
-                                  Evenement type_evenement, Salle salle , Utilisateur utilisateur);
+                                  Evenement type_evenement, Long salleId , Long utilisateurId);
     Reservation updateReservation(Long id, LocalDate newDate , LocalTime newH_debut, LocalTime newH_fin, Status newStatus , Evenement newtypeEvenement);
-    void deleteReservation(Long id , Reservation reservation);
+    void deleteReservation(Long id);
 
     //**************************************************************************
     Reservation updateReservationStatus(Long id, String newStatus);
@@ -21,7 +21,12 @@ public interface ReservationService {
     List<Reservation> getReservationsBySalleAndDate(Long salleId, LocalDate date);
     List<Reservation> getReservationsByStatus(String status);
 
-
+//***********************************************************************************
+    Reservation ReservationById(Long id);
+    List<Reservation> getReservationsByUserId(Long id);
+    List<Reservation> getReservationsBySalleId(Long id);
+    List<Reservation> getReservationByUserName(String nom);
+    List<Salle> getSallesDisponibles(LocalDate date, LocalTime startTime, LocalTime endTime);
 
 
 

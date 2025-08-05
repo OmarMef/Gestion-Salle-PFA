@@ -20,6 +20,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findByUtilisateurNom(String nom);
     List<Reservation> findByStatus(Status status);
 
+
 //**************************************************************************************************
 
     @Query("SELECT r FROM Reservation r " +

@@ -1,5 +1,6 @@
 package pfa.gestionsalle.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,8 @@ public class Salle {
         this.localisation = localisation;
     }
 
-    @OneToMany(mappedBy = "salle" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "salle" ,fetch = FetchType.LAZY)
     @JsonManagedReference
+    @JsonIgnore
     private List<Reservation> reservations = new ArrayList<>();
 }

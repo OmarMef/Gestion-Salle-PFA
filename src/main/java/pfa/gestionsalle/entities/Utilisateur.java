@@ -1,6 +1,7 @@
 package pfa.gestionsalle.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -43,12 +44,14 @@ public class Utilisateur {
         this.role = role;
     }
 
-    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "utilisateur",fetch = FetchType.LAZY)
     @JsonManagedReference
+    @JsonIgnore
     private List<Reservation> reservations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "utilisateur" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "utilisateur" ,fetch = FetchType.LAZY)
     @JsonManagedReference
+    @JsonIgnore
     private List<Historique> historiques = new ArrayList<>();
 
 }
