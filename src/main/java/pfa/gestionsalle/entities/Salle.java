@@ -34,4 +34,9 @@ public class Salle {
     @JsonManagedReference
     @JsonIgnore
     private List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "salle")
+    @JsonManagedReference
+    @JsonIgnore
+    private List<SalleEquipement> salleEquipements = new ArrayList<>();
 }

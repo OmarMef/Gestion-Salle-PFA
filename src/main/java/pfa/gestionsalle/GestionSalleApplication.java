@@ -10,9 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pfa.gestionsalle.entities.*;
 import pfa.gestionsalle.security.services.AccountService;
-import pfa.gestionsalle.service.ReservationService;
-import pfa.gestionsalle.service.RoleService;
-import pfa.gestionsalle.service.SalleService;
+import pfa.gestionsalle.service.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -35,7 +33,8 @@ public class GestionSalleApplication implements CommandLineRunner {
 
 	@Bean
 	CommandLineRunner commandLineRunner(AccountService accountService, RoleService roleService ,
-										SalleService salleService, ReservationService reservationService)
+										SalleService salleService, ReservationService reservationService,
+										EquipementService equipementService, SalleEquipementService salleEquipementService)
 	{
 		return args -> {
 			roleService.addNewRole("ADMIN", "ROLE_ADMIN");
@@ -79,6 +78,18 @@ public class GestionSalleApplication implements CommandLineRunner {
 					LocalTime.of(12,30),LocalTime.of(13,00), Evenement.REUNION
 					,salle2.getId() , user2.getId());
 			reservationService.deleteReservation(1L);
+
+			Equipement equipement1 = equipementService.saveEquipement("table","table",100);
+			Equipement equipement2 =equipementService.saveEquipement("chaise","chaise",100);
+
+			salleEquipementService.addEquipementToSalle(salle1.getId(),equipement1.getId(),50);
+			salleEquipementService.addEquipementToSalle(salle1.getId(),equipement2.getId(),60);
+
+
+			salleEquipementService.addEquipementToSalle(salle2.getId(),equipement1.getId(),50);
+			salleEquipementService.addEquipementToSalle(salle2.getId(),equipement2.getId(),40);
+
+
 		};
 	}
 

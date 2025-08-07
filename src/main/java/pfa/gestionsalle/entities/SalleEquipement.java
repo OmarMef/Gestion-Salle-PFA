@@ -22,7 +22,7 @@ public class SalleEquipement {
     @ManyToOne
     @MapsId("idEquipement")
     @JoinColumn(name = "id_equipement")
-    private Equipement equipment;
+    private Equipement equipement;
 
 
     private int quantite;

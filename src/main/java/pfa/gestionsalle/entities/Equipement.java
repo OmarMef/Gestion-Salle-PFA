@@ -1,12 +1,14 @@
 package pfa.gestionsalle.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -16,9 +18,14 @@ import lombok.NoArgsConstructor;
 public class Equipement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_equipement;
+    private long id;
 
-    private String nom_equipement;
+    private String nom;
     private String description;
     private int quantite;
+
+    @OneToMany(mappedBy = "equipement")
+    @JsonManagedReference
+    @JsonIgnore
+    private List<SalleEquipement> salleEquipements = new ArrayList<>();
 }
