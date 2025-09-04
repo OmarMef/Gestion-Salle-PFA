@@ -40,12 +40,11 @@ public class GestionSalleApplication implements CommandLineRunner {
 			roleService.addNewRole("ADMIN", "ROLE_ADMIN");
 			roleService.addNewRole("USER", "ROLE_USER");
 			roleService.addNewRole("RESPONSABLE", "ROLE_RESPONSABLE");
-			roleService.deleteRole("RESPONSABLE");
 
-			Utilisateur user1 = accountService.addNewUser("Meftah","Omar","user1@gmail.com","1234","1234");
-			Utilisateur user2 = accountService.addNewUser("Ben","Ahmed","user2@gmail.com","1234","1234");
-			Utilisateur user3 = accountService.addNewUser("Ham","Khalil","admin1@gmail.com","1234","1234");
-			Utilisateur user4 = accountService.addNewUser("Test","Test","admin2@gmail.com","1234","1234");
+			Utilisateur user1 = accountService.addNewUser("user1","user1","user1@gmail.com","1234","1234");
+			Utilisateur user2 = accountService.addNewUser("user2","user2","user2@gmail.com","1234","1234");
+			Utilisateur user3 = accountService.addNewUser("admin1","admin1","admin1@gmail.com","1234","1234");
+			Utilisateur user4 = accountService.addNewUser("admin2","admin2","admin2@gmail.com","1234","1234");
 
 
 			accountService.addRoleToUser("user1@gmail.com","USER");
@@ -58,12 +57,17 @@ public class GestionSalleApplication implements CommandLineRunner {
 
 
 			accountService.addNewUser("Meftah","Omar","omar@gmail.com","1234","1234");
+			accountService.addRoleToUser("omar@gmail.com","ADMIN");
 			Salle salle1 = salleService.createSalle("salle1",100,"CASABLANCA");
 			Salle salle2 = salleService.createSalle("salle2",250,"RABAT");
 
 
 			reservationService.createReservation(LocalDate.of(2022,10,13)
 					, LocalTime.of(12,30),LocalTime.of(13,00), Evenement.REUNION
+					,salle1.getId() , user1.getId());
+
+			reservationService.createReservation(LocalDate.of(2025,8,30)
+					, LocalTime.of(10,00),LocalTime.of(11,00), Evenement.REUNION
 					,salle1.getId() , user1.getId());
 
 			reservationService.createReservation(LocalDate.of(2022,10,13)

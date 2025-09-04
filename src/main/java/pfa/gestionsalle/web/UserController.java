@@ -3,27 +3,54 @@ package pfa.gestionsalle.web;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import pfa.gestionsalle.dto.UserDto;
+import pfa.gestionsalle.entities.Role;
 import pfa.gestionsalle.entities.Utilisateur;
 import pfa.gestionsalle.repository.UserRepository;
 import pfa.gestionsalle.security.services.AccountService;
+import pfa.gestionsalle.service.RoleService;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
 @AllArgsConstructor
-
+@RequestMapping("/user")
 public class UserController {
 
     public AccountService accountService;
 
-    @GetMapping("/home")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
-    public String home(){
-        return "Bonjour Page D acceuil";
+    @GetMapping("/me")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<UserDto> getCurrentUser(Principal principal) {
+        if (principal == null) {
+            // Spring ne voit pas la session
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Utilisateur user = accountService.findByUsername(principal.getName());
+        return ResponseEntity.ok(new UserDto(user.getNom(), user.getUsername()));
     }
+
+    @GetMapping("/me/id")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<Long> getCurrentUserId(Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Utilisateur user = accountService.findByUsername(principal.getName());
+        return ResponseEntity.ok(user.getId()); // renvoie l'ID
+    }
+
 //----------------------------------------------------------------------------------------------------------
 
     //*************************METHODES ADMIN****************************//
@@ -35,6 +62,7 @@ public class UserController {
                                   @RequestParam String username,
                                   @RequestParam String password ,
                                   @RequestParam String CPassword){
+
         return accountService.addNewUser(nom, prenom, username, password, CPassword);
     }
 
@@ -57,6 +85,7 @@ public class UserController {
             @RequestParam(defaultValue = "2") int size){
         return accountService.findAllUsers(PageRequest.of(page,size));
     }
+
 
     @GetMapping("/admin/users")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -92,8 +121,28 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Utilisateur findById(@PathVariable("id") long id) { return accountService.findById(id); }
 
-    //------------------------------------------------------------------------------------------------------------------
 
+    //------------------------------------------------------------------------------------------------------------------
+    @PostMapping("/addRole")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void addRoleToUser(@RequestParam String username,
+                              @RequestParam String role) {
+        accountService.addRoleToUser(username, role);
+    }
+
+    @PostMapping("/removeRole")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void removeRoleFromUser(@RequestParam String username,
+                                   @RequestParam String role) {
+        accountService.deleteRoleFromUser(username, role);
+    }
+
+    @GetMapping("/current-role")
+    public Map<String, String> getCurrentUserRole(Principal principal) {
+        String username = principal.getName(); // username de l'utilisateur connecté
+        String role = accountService.getRoleOfCurrentUser(username);
+        return Map.of("role", role); // renvoie JSON { "role": "ADMIN" } ou { "role": "USER" }
+    }
 
 
 }

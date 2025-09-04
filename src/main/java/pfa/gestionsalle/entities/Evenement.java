@@ -4,6 +4,7 @@ public enum Evenement {
     REUNION,
     COURS,
     CONFERENCE,
+    FORMATION,
     EXAMEN,
     AUTRE
 }

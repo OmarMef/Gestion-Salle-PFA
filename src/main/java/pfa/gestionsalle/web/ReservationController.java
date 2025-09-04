@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pfa.gestionsalle.dto.ReservationDto;
 import pfa.gestionsalle.entities.*;
 import pfa.gestionsalle.repository.ReservationRepository;
 import pfa.gestionsalle.repository.SalleRepository;
@@ -18,7 +19,6 @@ import java.util.List;
 @RequestMapping("/reserv")
 public class ReservationController {
 
-    private final ReservationRepository reservationRepository;
     private ReservationService reservationService;
 
     //*****************************METHODE ADMIN************************************
@@ -26,6 +26,7 @@ public class ReservationController {
     //SAVE
     @PostMapping("/save")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('RESPONSABLE')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('RESPONSABLE')")
     public Reservation saveReservation(@RequestParam LocalDate date_reservation ,
                                        @RequestParam LocalTime H_debut ,
                                        @RequestParam LocalTime H_fin,
@@ -35,6 +36,8 @@ public class ReservationController {
 
         return reservationService.createReservation(date_reservation,H_debut,H_fin,type_evenement,salleId,utilisateurId);
     }
+
+
 
     //UPDATE
     @PutMapping("/edit/{id}")
@@ -52,7 +55,7 @@ public class ReservationController {
     //DELETE
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER') or hasRole('RESPONSABLE')")
-    public void deleteReservation(@RequestParam Long id){
+    public void deleteReservation(@PathVariable Long id){
          reservationService.deleteReservation(id);
     }
 
@@ -64,6 +67,7 @@ public class ReservationController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Reservation> getAllReservations() {
         return reservationService.getAllReservations();
     }

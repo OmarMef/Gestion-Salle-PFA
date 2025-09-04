@@ -64,7 +64,7 @@ public class ReservationServiceImpl implements ReservationService {
         if (!available) {
             throw new RuntimeException("Salle indisponible à cette date/heure.");
         }
-
+        Reservation savedReservation = reservationRepository.save(reservation);
         reservation.setStatus(Status.EN_ATTENTE);
 
         Historique historique = new Historique();
@@ -76,7 +76,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         historiqueRepository.save(historique);
 
-        return reservationRepository.save(reservation);
+        return savedReservation;
     }
 
 

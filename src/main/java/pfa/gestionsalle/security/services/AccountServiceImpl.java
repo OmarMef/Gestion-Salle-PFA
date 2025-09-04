@@ -33,6 +33,7 @@ public class AccountServiceImpl implements AccountService {
                 .prenom(prenom)
                 .username(username)
                 .password(passwordEncoder.encode(password))
+                //.role(roleRepository.findByNomRole("USER"))
                 .build();
         Utilisateur savedUser = userRepository.save(user);
         return savedUser;
@@ -46,6 +47,7 @@ public class AccountServiceImpl implements AccountService {
         user.setNom(userDetails.getNom());
         user.setPrenom(userDetails.getPrenom());
         user.setUsername(userDetails.getUsername());
+        user.setRole(userDetails.getRole());
         return userRepository.save(user);
     }
 
@@ -96,6 +98,7 @@ public class AccountServiceImpl implements AccountService {
         if(user == null) throw new RuntimeException("User does not exist");
         if(role1 == null) throw new RuntimeException("Role does not exist");
         user.setRole(role1);
+        userRepository.save(user);
     }
 
     @Override
@@ -105,6 +108,7 @@ public class AccountServiceImpl implements AccountService {
         if(user == null) throw new RuntimeException("User does not exist");
         if(role1 == null) throw new RuntimeException("Role does not exist");
         user.setRole(null);
+        userRepository.save(user);
     }
 
     @Override
@@ -117,6 +121,15 @@ public class AccountServiceImpl implements AccountService {
         Utilisateur user1 =userRepository.findByUsername(Username);
         if(user1 == null) throw new RuntimeException("User does not exist");
         return user1.getRole();
+    }
+
+    @Override
+    public String getRoleOfCurrentUser(String username) {
+        Utilisateur user = userRepository.findByUsername(username);
+        if (user != null && user.getRole() != null) {
+            return user.getRole().getNomRole(); // renvoie "ADMIN" ou "USER"
+        }
+        return "USER"; // fallback si pas de rôle défini
     }
 
 }

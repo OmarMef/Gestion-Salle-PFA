@@ -38,7 +38,7 @@ public class SalleController {
     }
 
 //---------------------------------------------------------------------------------------------
-    @GetMapping("/salles")
+    @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Salle> findAll() { return salleService.findAll(); }
 

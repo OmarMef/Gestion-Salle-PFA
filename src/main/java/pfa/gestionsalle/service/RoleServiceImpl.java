@@ -29,17 +29,19 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void deleteRole(String nomRole) {
-        Role role = roleRepository.findByNomRole(nomRole);
-        if (role == null) {
-            throw new EntityNotFoundException("Rôle non trouvé : " + nomRole);
-        }
-        roleRepository.delete(role);
+    public void deleteRoleById(Long id) {
+        roleRepository.deleteById(id);
     }
 
     @Override
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
+    }
+
+    @Override
+    public Role findById(Long id) {
+        return roleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rôle non trouvé avec l'id : " + id));
     }
 
 }

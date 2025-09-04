@@ -17,14 +17,16 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping("/save")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Role AddNewRole(String nomRole ,String desc){
         return roleService.addNewRole(nomRole, desc);
     }
 
-    @DeleteMapping("/delete")
-    public void deleteRole(String nomRole){
-        roleService.deleteRole(nomRole);
+    @DeleteMapping("/delete/{id}")
+    public void deleteById(@PathVariable Long id){
+        roleService.deleteRoleById(id);
     }
+
 
     @GetMapping("/all")
     public List<Role> getAllRoles() {

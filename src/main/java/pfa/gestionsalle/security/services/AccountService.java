@@ -21,6 +21,7 @@ public interface AccountService {
     List<Utilisateur> findByNomContainsIgnoreCase(String KW);
     List<Utilisateur> findByPrenomContainsIgnoreCase(String prenom);
     Utilisateur findById(long id);
+    String getRoleOfCurrentUser(String username);
 //******************************************************************************************
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     void addRoleToUser(String username , String role);
