@@ -4,9 +4,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pfa.gestionsalle.entities.Equipement;
+import pfa.gestionsalle.entities.Salle;
 import pfa.gestionsalle.repository.EquipementReposiroty;
+import pfa.gestionsalle.repository.SalleEquipementRepository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -14,6 +19,7 @@ import java.util.List;
 public class EquipementServiceImpl implements EquipementService {
 
     private EquipementReposiroty equipementRepository;
+    private SalleEquipementRepository salleEquipementRepository;
 
     //SAVE
     @Override
@@ -101,5 +107,36 @@ public class EquipementServiceImpl implements EquipementService {
     @Override
     public List<Equipement> getEquipementsDisponibles() {
         return equipementRepository.findEquipementsNonUtilises();
+    }
+
+    @Override
+    public List<Map<String, Object>> getDisponibiliteEquipements() {
+        List<Equipement> equipements = equipementRepository.findAll();
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Equipement e : equipements) {
+            Map<String, Object> equipementData = new HashMap<>();
+            equipementData.put("nom", e.getNom());
+
+            boolean estUtilise = equipementRepository.isEquipementUsed(e.getId());
+            equipementData.put("estUtilise", estUtilise);
+
+            int quantiteRestante = e.getQuantite() - salleEquipementRepository.totalQuantiteAffectee(e.getId());
+            equipementData.put("quantiteRestante", quantiteRestante);
+
+            // Récupérer les salles où l'équipement est affecté
+            List<Map<String, Object>> salles = new ArrayList<>();
+            e.getSalleEquipements().forEach(se -> {
+                Map<String, Object> salleData = new HashMap<>();
+                salleData.put("nomSalle", se.getSalle().getNom());
+                salleData.put("quantite", se.getQuantite());
+                salles.add(salleData);
+            });
+            equipementData.put("salles", salles);
+
+            result.add(equipementData);
+        }
+
+        return result;
     }
 }

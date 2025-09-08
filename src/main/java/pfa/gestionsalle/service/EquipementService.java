@@ -3,6 +3,7 @@ package pfa.gestionsalle.service;
 import pfa.gestionsalle.entities.Equipement;
 
 import java.util.List;
+import java.util.Map;
 
 public interface EquipementService {
 
@@ -18,6 +19,7 @@ public interface EquipementService {
     List<Equipement> findByNomContains(String KW);
     List<Equipement> findByQuantiteGreaterThan(int seuil);
     List<Equipement> getEquipementsDisponibles();
+    List<Map<String, Object>> getDisponibiliteEquipements();
 
 
 

@@ -23,6 +23,8 @@ public class Equipement {
     private String nom;
     private String description;
     private int quantite;
+    private boolean isUsed;
+
 
     @OneToMany(mappedBy = "equipement")
     @JsonManagedReference

@@ -7,7 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import pfa.gestionsalle.entities.Salle;
 import pfa.gestionsalle.repository.SalleRepository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -112,5 +115,13 @@ public class SalleServiceImpl implements SalleService {
         }
         return salles;
     }
+
+
+    @Override
+    public List<Salle> getAvailableSalles(LocalDate date, LocalTime heureDebut, LocalTime heureFin, int capaciteMin) {
+        return salleRepository.findAvailableSalles(date, heureDebut, heureFin, capaciteMin);
+    }
+
+
 
 }

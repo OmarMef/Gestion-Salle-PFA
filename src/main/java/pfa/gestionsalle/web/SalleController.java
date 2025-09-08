@@ -6,9 +6,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pfa.gestionsalle.entities.Salle;
-import pfa.gestionsalle.repository.SalleRepository;
 import pfa.gestionsalle.service.SalleService;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -20,13 +21,13 @@ public class SalleController {
         //**************GERER LES SALLES***********************
 
     @PostMapping("/save")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('RESPONSABLE')")
     public Salle createSalle(String nomSalle ,int capacite ,String localisation) {
         return salleService.createSalle(nomSalle,capacite,localisation);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('RESPONSABLE')")
     public Salle updateSalle(@PathVariable Long id, @RequestBody Salle salleModifiee) {
         return salleService.updateSalle(id, salleModifiee);
     }
@@ -67,4 +68,18 @@ public class SalleController {
     { return salleService.findByCapaciteGreaterThanEqualAndLocalisationContainingIgnoreCase(capacite, localisation);}
 
 
+    @GetMapping("/available")
+    public List<Salle> getAvailableSalles(
+            @RequestParam("date") String date,
+            @RequestParam("heureDebut") String heureDebut,
+            @RequestParam("heureFin") String heureFin,
+            @RequestParam("capaciteMin") int capaciteMin
+    ) {
+        return salleService.getAvailableSalles(
+                LocalDate.parse(date),
+                LocalTime.parse(heureDebut),
+                LocalTime.parse(heureFin),
+                capaciteMin
+        );
+    }
 }

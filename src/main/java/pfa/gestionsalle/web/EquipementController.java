@@ -7,6 +7,7 @@ import pfa.gestionsalle.entities.Equipement;
 import pfa.gestionsalle.service.EquipementService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class EquipementController {
 
     //SAVE
     @PostMapping("/save")
-    @PreAuthorize("hasRole('ADMIN_ROLE')")
+    @PreAuthorize("hasRole('ADMIN')")
     public Equipement createEquipement(@RequestParam String nom,
                                        @RequestParam String description,
                                        @RequestParam int quantite) {
@@ -28,7 +29,7 @@ public class EquipementController {
 
     //UPDATE
     @PutMapping("/edit/id/{id}")
-    @PreAuthorize("hasRole('ADMIN_ROLE')")
+    @PreAuthorize("hasRole('ADMIN')")
     public Object updateEquipement(@PathVariable Long id,
                                    @RequestParam String nom,
                                    @RequestParam String description,
@@ -42,7 +43,7 @@ public class EquipementController {
 
 
     //DELETE
-    @DeleteMapping("/delete/id/{id}")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN_ROLE')")
     public void deleteEquipement(@PathVariable Long id) {
         equipementService.deleteEquipement(id);
@@ -78,6 +79,11 @@ public class EquipementController {
     @GetMapping("/disponibles")
     public List<Equipement> getEquipementsDisponibles() {
         return equipementService.getEquipementsDisponibles();
+    }
+
+    @GetMapping("/disponible")
+    public List<Map<String, Object>> getDisponibiliteEquipements() {
+        return equipementService.getDisponibiliteEquipements();
     }
 
 

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import pfa.gestionsalle.entities.Salle;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -22,6 +24,7 @@ public interface SalleService {
     Salle findSalleByCapacite(int capacite);
     List<Salle> findByNomContainingIgnoreCase(String KW);
     List<Salle> findByCapaciteGreaterThanEqualAndLocalisationContainingIgnoreCase(int capacite, String localisation);
+    List<Salle> getAvailableSalles(LocalDate date, LocalTime heureDebut, LocalTime heureFin, int capaciteMin);
 
 
 

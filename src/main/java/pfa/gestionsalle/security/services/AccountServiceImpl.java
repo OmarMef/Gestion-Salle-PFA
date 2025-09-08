@@ -33,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
                 .prenom(prenom)
                 .username(username)
                 .password(passwordEncoder.encode(password))
-                //.role(roleRepository.findByNomRole("USER"))
+                .role(roleRepository.findByNomRole("USER"))
                 .build();
         Utilisateur savedUser = userRepository.save(user);
         return savedUser;
