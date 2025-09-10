@@ -30,7 +30,7 @@ public class Historique {
 
     @ManyToOne
     @JoinColumn(name = "id_reservation")
-    @JsonIncludeProperties({"id","status","H_debut","H_fin"})
+    @JsonIncludeProperties({"id","status","H_debut","H_fin","salle"})
     private Reservation reservation;
 
 

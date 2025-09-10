@@ -56,7 +56,7 @@ public class UserController {
     //*************************METHODES ADMIN****************************//
 
     @PostMapping("/save")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public Utilisateur SaveUser(@RequestParam String nom ,
                                   @RequestParam String prenom,
                                   @RequestParam String username,
@@ -67,19 +67,19 @@ public class UserController {
     }
 
     @PutMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('RESPONSABLE')")
     public Utilisateur EditUser(@PathVariable("id") Long id ,@RequestBody Utilisateur userDetails) {
         return accountService.editUser(id, userDetails);
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(@PathVariable("id") Long id) { accountService.deleteUser(id); }
 
     //------------------------------------------------------------------------------------------------
 
     @GetMapping("/admin/index")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public Page index(
             @RequestParam(defaultValue = "0") int page ,
             @RequestParam(defaultValue = "2") int size){
