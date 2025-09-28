@@ -10,7 +10,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 public interface SalleRepository extends JpaRepository<Salle, Long> {
-    Salle findSalleByNom(String nom);
+    Salle findByNom(String nom);
     Salle findSalleByCapacite(int capacite);
     List<Salle> findByNomContainingIgnoreCase(String KW);
     List<Salle> findByCapaciteGreaterThanEqualAndLocalisationContainingIgnoreCase(int capacite, String localisation);

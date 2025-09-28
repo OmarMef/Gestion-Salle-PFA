@@ -22,18 +22,13 @@ public class SalleServiceImpl implements SalleService {
     //SAVE
     @Override
     public Salle createSalle(String nomSalle ,int capacite ,String localisation) {
-        Salle salle = salleRepository.findSalleByNom(nomSalle);
+        Salle salle = salleRepository.findByNom(nomSalle);
         if (salle != null) {
             throw new RuntimeException("Salle déjà existante");
         }
 
-        salle = Salle.builder()
-                    .nom(nomSalle)
-                    .capacite(capacite)
-                    .localisation(localisation)
-                    .build();
-
-        return salleRepository.save(salle);
+        Salle newsalle = new Salle(nomSalle, capacite, localisation);
+        return salleRepository.save(newsalle);
 
     }
 
@@ -76,7 +71,7 @@ public class SalleServiceImpl implements SalleService {
     }
 
     public Salle findSalleByNom(String nom) {
-        Salle salle = salleRepository.findSalleByNom(nom);
+        Salle salle = salleRepository.findByNom(nom);
         if (salle == null) {
             throw new EntityNotFoundException("Salle introuvable avec le nom : " + nom);
         }

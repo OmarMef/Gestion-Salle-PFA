@@ -32,11 +32,16 @@ public class GestionSalleApplication implements CommandLineRunner {
 	}
 
 	@Bean
+	PasswordEncoder passwordEncoder(){
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
 	CommandLineRunner commandLineRunner(AccountService accountService, RoleService roleService ,
 										SalleService salleService, ReservationService reservationService,
 										EquipementService equipementService, SalleEquipementService salleEquipementService)
 	{
-		return args -> {
+		return args -> {/*
 			roleService.addNewRole("ADMIN", "ROLE_ADMIN");
 			roleService.addNewRole("USER", "ROLE_USER");
 			roleService.addNewRole("RESPONSABLE", "ROLE_RESPONSABLE");
@@ -50,10 +55,8 @@ public class GestionSalleApplication implements CommandLineRunner {
 			accountService.addRoleToUser("user1@gmail.com","USER");
 			accountService.addRoleToUser("user2@gmail.com","USER");
 			accountService.addRoleToUser("admin1@gmail.com","ADMIN");
-			accountService.addRoleToUser("admin2@gmail.com","USER");
-
-			accountService.deleteRoleFromUser("admin2@gmail.com","USER");
 			accountService.addRoleToUser("admin2@gmail.com","ADMIN");
+
 
 
 			accountService.addNewUser("Meftah","Omar","omar@gmail.com","1234","1234");
@@ -92,13 +95,9 @@ public class GestionSalleApplication implements CommandLineRunner {
 
 			salleEquipementService.addEquipementToSalle(salle2.getId(),equipement1.getId(),50);
 			salleEquipementService.addEquipementToSalle(salle2.getId(),equipement2.getId(),40);
-
+*/
 
 		};
 	}
 
-	@Bean
-	PasswordEncoder passwordEncoder(){
-		return new BCryptPasswordEncoder();
-	}
 }
